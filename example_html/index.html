@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>ArcGIS JavaScript Tutorials: Create a JavaScript starter app</title>
+    <link
+      rel="stylesheet"
+      href="http://localhost/arcgis_js_v412_api/arcgis_js_api/library/4.12/esri/themes/light/main.css"
+    />
+    <script src="http://localhost/arcgis_js_v412_api/arcgis_js_api/library/4.12/init.js"></script>
+    <style>
+      html, body, #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+
+    <script>
+      require([
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/layers/FeatureLayer",
+        "esri/Basemap",
+        "esri/layers/TileLayer"
+      ], function(Map, MapView, FeatureLayer, Basemap, TileLayer) {
+
+      var layer = new TileLayer({
+        url: "http://localhost:8080/arcgis/rest/services/ChinaOnlineCommunity/MapServer"
+      });
+
+      var basemap = new Basemap({
+      baseLayers: [
+      layer
+      ]
+      });
+
+      var map = new Map({
+      basemap: basemap
+      });
+
+        var view = new MapView({
+          container: "viewDiv",
+          map: map
+        });
+
+        /********************
+         * Add feature layer
+         ********************/
+
+        // Carbon storage of trees in Warren Wilson College.
+        var featureLayer = new FeatureLayer({
+          url: "http://localhost:8080/arcgis/rest/services/Military/FeatureServer/2"
+        });
+
+        map.add(featureLayer);
+      });
+    </script>
+  </head>
+  <body>
+    <div id="viewDiv"></div>
+  </body>
+</html>
