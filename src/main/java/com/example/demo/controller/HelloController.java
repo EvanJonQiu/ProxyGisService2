@@ -23,14 +23,19 @@ import javax.net.ssl.X509TrustManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.aop.LogAop;
 import com.example.demo.utils.ParameterStringBuilder;
 
 @RestController
 public class HelloController {
+	
+	private Logger logger = LoggerFactory.getLogger(HelloController.class);
 
 	@RequestMapping(value="/")
 	public String hello() {
@@ -40,16 +45,16 @@ public class HelloController {
 	@RequestMapping(value="/arcgis/rest/**/MapServer/**")
 	public void Hello(HttpServletRequest request, HttpServletResponse response) {
 		// test url : http://localhost:8080/arcgis/rest/services/ChinaOnlineCommunity/MapServer
-		System.out.println(request.getRequestURI());
-		System.out.println(request.getMethod());
-		System.out.println(request.getRemoteHost());
-		System.out.println(request.getServerName());
+		logger.debug(request.getRequestURI());
+		logger.debug(request.getMethod());
+		logger.debug(request.getRemoteHost());
+		logger.debug(request.getServerName());
 		
 		Enumeration<String> headerNames = request.getHeaderNames();
 		while (headerNames.hasMoreElements()) {
 			String name = (String)headerNames.nextElement();
 			String value = request.getHeader(name);
-			System.out.println(name + "=" + value);
+			logger.debug(name + "=" + value);
 		}
 		
 		System.out.println("============================");
@@ -89,7 +94,7 @@ public class HelloController {
 					for (String value : entries.getValue()) {
 						values += value + "";
 					}
-					System.out.println(entries.getKey() + "=" + values);
+					logger.debug(entries.getKey() + "=" + values);
 				}
 				
 				
@@ -104,7 +109,8 @@ public class HelloController {
 					 while ((temp = br.readLine()) != null) {
 						 sbf.append(temp);
 		             }
-					 System.out.println(sbf.toString());
+					 logger.debug(sbf.toString());
+					 
 					 
 					 response.setHeader("Access-Control-Allow-Origin", "*");
 					 //response.setHeader("Cache-Control", "max-age=86400");
@@ -149,18 +155,17 @@ public class HelloController {
 	@RequestMapping(value= {"/arcgis/rest/**/FeatureServer/{layerId}", "/arcgis/rest/**/MapServer/{layerId}"})
 	public void World(HttpServletRequest request, HttpServletResponse response, @PathVariable("layerId") int layerId) {
 		// test url: http://localhost:8080/arcgis/rest/services/Military/FeatureServer/2
-		System.out.println(request.getRequestURI());
-		System.out.println(request.getMethod());
-		System.out.println(request.getRemoteHost());
-		System.out.println(request.getServerName());
-		System.out.println(layerId);
-		
+		logger.debug(request.getRequestURI());
+		logger.debug(request.getMethod());
+		logger.debug(request.getRemoteHost());
+		logger.debug(request.getServerName());
+		logger.debug(String.valueOf(layerId));
 		
 		Enumeration<String> headerNames = request.getHeaderNames();
 		while (headerNames.hasMoreElements()) {
 			String name = (String)headerNames.nextElement();
 			String value = request.getHeader(name);
-			System.out.println(name + "=" + value);
+			logger.debug(name + "=" + value);
 		}
 		
 		System.out.println("============================");
@@ -200,7 +205,7 @@ public class HelloController {
 					for (String value : entries.getValue()) {
 						values += value + "";
 					}
-					System.out.println(entries.getKey() + "=" + values);
+					logger.debug(entries.getKey() + "=" + values);
 				}
 				
 				
@@ -215,7 +220,7 @@ public class HelloController {
 					 while ((temp = br.readLine()) != null) {
 						 sbf.append(temp);
 		             }
-					 System.out.println(sbf.toString());
+					 logger.debug(sbf.toString());
 					 
 					 response.setHeader("Access-Control-Allow-Origin", "*");
 					 //response.setHeader("Cache-Control", "max-age=86400");
@@ -259,16 +264,16 @@ public class HelloController {
 	
 	@RequestMapping(value= {"/arcgis/rest/**/FeatureServer/{layerId}/query/**", "/arcgis/rest/**/MapServer/{layerId}/query/**"})
 	public void hello(HttpServletRequest request, HttpServletResponse response) {
-		System.out.println(request.getRequestURI());
-		System.out.println(request.getMethod());
-		System.out.println(request.getRemoteHost());
-		System.out.println(request.getServerName());
+		logger.debug(request.getRequestURI());
+		logger.debug(request.getMethod());
+		logger.debug(request.getRemoteHost());
+		logger.debug(request.getServerName());
 		
 		Enumeration<String> headerNames = request.getHeaderNames();
 		while (headerNames.hasMoreElements()) {
 			String name = (String)headerNames.nextElement();
 			String value = request.getHeader(name);
-			System.out.println(name + "=" + value);
+			logger.debug(name + "=" + value);
 		}
 		
 		System.out.println("============================");
@@ -309,9 +314,9 @@ public class HelloController {
 						values += value + "";
 					}
 					if (entries.getKey() != null) {
-						System.out.println(entries.getKey() + "=" + values);
+						logger.debug(entries.getKey() + "=" + values);
 					} else {
-						System.out.println(values);
+						logger.debug(values);
 					}
 				}
 				
@@ -327,7 +332,7 @@ public class HelloController {
 					 while ((temp = br.readLine()) != null) {
 						 sbf.append(temp);
 		             }
-					 System.out.println(sbf.toString());
+					 logger.debug(sbf.toString());
 					 
 					 response.setHeader("Access-Control-Allow-Origin", "*");
 					 //response.setHeader("Cache-Control", "max-age=86400");
